@@ -18,7 +18,7 @@ authors = [
     {name = "Peter Gee", email = "petergee302@gmail.com"}
 ]
 license = {text = "MIT"}
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 
 # Core application dependencies (installed via 'pip install .')
 dependencies = []
@@ -38,7 +38,7 @@ exclude = ["**/*.egg-info", "**/__pycache__"]
 
 pythonPlatform   = "Linux"
 typeCheckingMode = "standard"
-pythonVersion    = "3.12"
+pythonVersion    = "3.10"
 useLibraryCodeForTypes             = true
 reportMissingImports               = true
 reportImportCycles                 = "error"
