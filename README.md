@@ -145,18 +145,40 @@ The effective level within module is the maximum of the two, for instance:
     DEBUG   INFO     INFO
     ERROR   INFO     ERROR
 ```
+<h4 style="color:violet">
+💀 FATAL:
+</h4>
 
-#### FATAL:
 This level indicates a critical error that causes the application to abort or terminate. It is used for unrecoverable errors that require immediate attention, such as a system crash or an application shutdown.
-#### ERROR:
+
+<h4 style="color:red">
+💥 ERROR:
+</h4>
+
 This level signifies a significant problem that prevents a specific operation from being completed. While the application may continue running, this level alerts teams to critical issues that need immediate investigation and resolution.
-#### WARNING:
+
+<h4 style="color:yellow">
+⚠️ WARNING:
+</h4>
+
 This level is used for unexpected events that do not prevent the application from functioning but may indicate potential problems. It is often used to signal conditions that are close to causing errors, such as approaching resource limits.
-#### INFO:
+
+<h4 style="color:white">
+💬 INFO:
+</h4>
+
 This level is used for general operational messages that provide information about the normal flow of the application. It is suitable for tracking typical operations, such as successful logins or service startups.
-#### TRACE:
+
+<h4 style="color:green">
+🐾 TRACE:
+</h4>
+
 This level is used for tracing the execution flow of the application, and is not part of the standard Python logger. It is typically employed during development or debugging sessions to monitor the sequence of function calls and execution paths. Trace logs should provide object types and unique identifiers of their instances to allow object-level resolution of information.
-#### DEBUG:
+
+<h4 style="color:cyan">
+🔎 DEBUG:
+</h4>
+
 This level provides the most detailed information useful for diagnosing problems. It is typically used during development or troubleshooting to trace application state, variable values, and business logic decisions. Since this type of logs may output frequently and in large volumes necessary to understand particular problem, it may have significant impact on the performance. Python does not have preprocessor like C/C++ which could automatically eliminate preparation of data for such calls, the only available remedies are to condition the `logger.debug()` call, or simply not to push such debug logs to the repository.
 
 <h3 id="namespace">
