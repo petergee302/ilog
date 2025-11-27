@@ -20,7 +20,6 @@ def test_thresholds():
         logger.trace  ('trace')
         logger.debug  ('debug')
 
-
     for n_enabled, level in enumerate(ilog.LEVELS):
         if os.path.isfile(LOCAL_FPATH):
             os.remove(LOCAL_FPATH)
@@ -32,6 +31,9 @@ def test_thresholds():
                     assert n_lines == n_enabled
             else:
                 assert not os.path.isfile(LOCAL_FPATH)
+    # clean-up
+    os.remove(LOCAL_FPATH)
+
 
 def test_indentation():
     """
@@ -50,6 +52,8 @@ def test_indentation():
                 logger.trace(f'< level {indent}')
                 assert len(prior_indent) > len(logger.indent)
                 prior_indent = logger.indent
+    # clean-up
+    os.remove(LOCAL_FPATH)
 
 
 def test_nesting():
@@ -67,6 +71,9 @@ def test_nesting():
     inner_stat = os.stat(INNER_FPATH)
     outer_stat = os.stat(OUTER_FPATH)
     assert inner_stat.st_size*3 <= outer_stat.st_size
+    # clean-up
+    os.remove(OUTER_FPATH)
+    os.remove(INNER_FPATH)
 
 
 if __name__ == '__main__':

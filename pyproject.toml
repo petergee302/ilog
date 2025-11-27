@@ -33,8 +33,8 @@ dev = [
 # TOOL CONFIGURATION
 
 [tool.pyright]
-include = ["src", "tests"]
-exclude = ["**/node_modules", "**/__pycache__"]
+include = ["src", "tests", "examples"]
+exclude = ["**/*.egg-info", "**/__pycache__"]
 
 pythonPlatform   = "Linux"
 typeCheckingMode = "standard"

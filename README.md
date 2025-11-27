@@ -1,9 +1,9 @@
 # Indented Logger
 An extension of the standard logging package, supplying:
-- indentation,
+- block indentation,
 - severity coloring,
 - default formatting and saving,
-- extra trace level.
+- dedicated level for control flow tracing.
 
 ## Contents
 1. [Installation](#installation)
@@ -22,7 +22,7 @@ An extension of the standard logging package, supplying:
 
 In order to simply install the repo as package in the `pip` environment, run the following:
 ```shell
-$ git clone <git:path/to/ilog/repo> .
+$ git clone https://github.com/petergee302/ilog.git .
 $ pip install .
 ```
 
@@ -30,6 +30,12 @@ However if you plan to play with it and make improvements, use editable mode wit
 ```shell
 $ pip install -e .[dev]
 ```
+Static code analysis and tests are run with:
+```shell
+$ pyright
+$ pytest -vs
+```
+
 
 <h2 id="usage">
 2. Usage
@@ -196,29 +202,44 @@ Standard Python logger is not designed with execution tracing in mind, thus ther
         logger.trace(f'{type(self).__name__}[{id(self):012X}]({arg1=},  {arg2=})')
     ```
 
-4. If the function or method is time-consuming, may crash, or causes other log messages to appear, use indentation with at least two entries marking both entry and exit points:
+4. If the function or method is time-consuming, may crash, or causes other log messages to appear, use indentation with at least two messages marking both entry and exit points:
     ```python
     def method(self, arg3 :str) -> float:
         logger.trace(f'> {type(self).__name__}[{id(self):012X}].method({arg3=})')
         ...
-        logger.trace(f'> {type(self).__name__}[{id(self):012X}].method(): {result=}')
+        logger.trace(f'< {type(self).__name__}[{id(self):012X}].method(): {result=}')
         return result
     ```
     Do not use indentation in functions or methods that are quick to complete and do not invoke other logging code.
 
-5. The above logs are pretty standard, but long enough to make room for mistakes. In order to reduce their chances, reduce the number of exit points to bare minimum, ideally to just one. That means no code like:
+5. The above logs are pretty standard, but long enough to make room for mistakes. In order to reduce their chances, bring the number of return statements to bare minimum, ideally to just one. That means instead of the usual code like:
     ```python
     if condition-one:
+        logger.trace(f'< some_function(): {x}')
         return x
     ...
     if condition-two:
+        logger.trace(f'< some_function(): {y}')
         return y
     ...
-    if condition-three:
-        return z
-    ...
-    return w
+    logger.trace(f'< some_function(): {z}')
+    return z
     ```
+    write
+    ```python
+    if condition-one:
+        result = x
+    else:
+        ...
+        if condition-two:
+            result = y
+        else:
+            ...
+            result = z
+    logger.trace(f'< some_function(): {result}')
+    return result
+    ```
+
 
 -----------------------------------
 Copyright © 2018-2025 Peter Gee<br>
