@@ -13,6 +13,7 @@ An extension of the standard logging package, supplying:
     + [Verbosity levels](#verbosity)
     + [Namespace](#namespace)
     + [Message prefix](#message)
+    + [Automated logging](#automation)
     + [Tracing recommendation](#tracing)
 
 <h2 id="installation">
@@ -205,8 +206,124 @@ The second part of the prefix can be modified (e.g. the thread ID removed, if no
 - `ILOG_LINE_FORMAT` environment variable, or by
 - `Setup(line_format = ...)` argument during initialization
 
+
+<h3 id="automation">
+2.6 Automated logging
+</h3>
+
+As projects get shorter and shorter time-frames, hardly anyone has enough patience to go through the entire code weaving in such a lines. For those who seek error-resistance and uniformity despite lesser control and bigger overhead, there are set of decorators that make the logging automated.
+There are two kind of each:
+<table>
+    <tr>
+        <td>
+            call
+        </td>
+        <td>
+            Log arguments and result after exit of a function/method
+        </td>
+    </tr>
+    <tr>
+        <td>
+            block
+        </td>
+        <td>
+            Log arguments before the entry of a function/method, and result after its exit
+        </td>
+    </tr>
+</table>
+
+They operate on function, method, and whole class level (the latter may be particularly useful if you just need to trace your code execution, but have no time for applying the logs):
+<table>
+    <tr>
+        <td>function-level</td>
+        <td style="font-family:courier;text-align:right">
+             @fatal_function_call(), <br>
+             @error_function_call(), <br>
+           @warning_function_call(), <br>
+              @info_function_call(), <br>
+             @trace_function_call(), <br>
+             @debug_function_call(), <br>
+             @fatal_function_block(),<br>
+             @error_function_block(),<br>
+           @warning_function_block(),<br>
+              @info_function_block(),<br>
+             @trace_function_block(),<br>
+             @debug_function_block(),
+        </td>
+    </tr>
+    <tr>
+        <td>method-level</td>
+        <td style="font-family:courier;text-align:right">
+              @fatal_method_call(), <br>
+              @error_method_call(), <br>
+            @warning_method_call(), <br>
+               @info_method_call(), <br>
+              @trace_method_call(), <br>
+              @debug_method_call(), <br>
+              @fatal_method_block(),<br>
+              @error_method_block(),<br>
+            @warning_method_block(),<br>
+               @info_method_block(),<br>
+              @trace_method_block(),<br>
+              @debug_method_block(),
+        </td>
+    </tr>
+    <tr>
+        <td>class-level</td>
+        <td style="font-family:courier;text-align:right">
+              @fatal_calls(), <br>
+              @error_calls(), <br>
+            @warning_calls(), <br>
+               @info_calls(), <br>
+              @trace_calls(), <br>
+              @debug_calls(), <br>
+              @fatal_blocks(),<br>
+              @error_blocks(),<br>
+            @warning_blocks(),<br>
+               @info_blocks(),<br>
+              @trace_blocks(),<br>
+              @debug_blocks(),
+        </td>
+    </tr>
+</table>
+
+The drawbacks of using automated logs is that
+-  there's no control over which arguments and return values are serialized, what sometimes may backfire resulting in a cluttered and _less_ readable console output, instead of a clear trace.
+- they do not capture any internal working of a function/method, nor signal any state or stage changes; they are primarily intended for tracing.
+
+#### Example:
+Instead of
+```python
+def fun() -> int:
+    logger.debug('> fun()')
+    result = ...
+    logger.debug('< fun(): %d', result)
+    return result
+```
+One can equivalently write
+```python
+@debug_function_block(logger)
+def fun() -> int:
+    result = ...
+    return result
+```
+Instead of painstakingly applying logs to all methods of a class
+```python
+class A:
+    def __init(self, ...):
+        logger.trace(...)
+        ...
+```
+you can simply use class-level decorator
+```python
+@trace_calls(logger)
+class A:
+    def __init(self, ...):
+        ...
+```
+
 <h3 id="tracing">
-2.6 Tracing recommendation
+2.7 Tracing recommendation
 </h3>
 
 Standard Python logger is not designed with execution tracing in mind, thus there's no `TRACE` level, nor there's a convention on what and when to log. Herein we outline such proposal based on past experiences from over a couple of decades.
@@ -261,6 +378,11 @@ Standard Python logger is not designed with execution tracing in mind, thus ther
     logger.trace(f'< some_function(): {result}')
     return result
     ```
+    or use function/method/class decorators to automate logging.
+
+6. In order to reduce chances for mistakes and inconsistency, prefer automated logging over manual. It is also the easier way to start with.
+
+    Use manual logging if the automated one is insufficient, _e.g._: it formats and prints large values which are not particularly important, or prints too much or too little, inundates the stream or does not capture some important elements.
 
 
 -----------------------------------

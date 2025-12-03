@@ -20,7 +20,7 @@ if __name__ == '__main__':
     parser = ArgumentParser('executable [OPTIONS]')
     # declare your arguments
     parser.add_argument('-v', '--verbosity',
-        choices = ilog.LEVELS,
+        choices = ilog.LEVEL_NAMES,
            type = str,
         default = ilog.DEFAULT_VERBOSITY_LEVEL,
            help = f'Verbosity level. ' \
