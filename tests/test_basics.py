@@ -4,6 +4,12 @@
 # MIT License
 import os
 import ilog
+import sys
+# make this script runnable from any location
+ROOT_RDPATH = os.path.relpath(__file__ + '/../..', os.getcwd()) + '/'
+assert os.path.isfile(ROOT_RDPATH + 'pyproject.toml')
+if ROOT_RDPATH not in sys.path:
+    sys.path.append(ROOT_RDPATH)
 
 TEST_NAMESPACE = 'ilog.tests'
 LOCAL_FPATH = './temp' + ilog.FILENAME_EXT
@@ -20,12 +26,12 @@ def test_thresholds():
         logger.trace  ('trace')
         logger.debug  ('debug')
 
-    for n_enabled, level in enumerate(ilog.LEVELS):
+    for n_enabled, level in enumerate(ilog.LEVEL_VALUES):
         if os.path.isfile(LOCAL_FPATH):
             os.remove(LOCAL_FPATH)
         with ilog.Setup(level, LOCAL_FPATH, namespace = TEST_NAMESPACE) as logger:
             log_all(logger)
-            if ilog.LEVEL_NAME_2_VALUE[level] != ilog.OFF:
+            if level != ilog.OFF:
                 with open(LOCAL_FPATH, 'rt', encoding = ilog.TEXT_ENCODING) as log_file:
                     n_lines = len(log_file.readlines())
                     assert n_lines == n_enabled
