@@ -23,7 +23,7 @@ An extension of the standard logging package, supplying:
 
 In order to simply install the repo as package in the `pip` environment, run the following:
 ```shell
-$ git clone https://github.com/petergee302/ilog.git .
+$ git clone https://github.com/petergee302/indelog.git .
 $ pip install .
 ```
 
