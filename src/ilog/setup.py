@@ -31,7 +31,7 @@ from ilog.defaults import (
     DEFAULT_VERBOSITY_LEVEL
 )
 from ilog.indented_logger import (
-    OFF, TRACE, LEVEL_NAME_2_VALUE, # LEVEL_NAMES, LEVEL_VALUES,
+    OFF, TRACE, LEVEL_NAME_2_VALUE,
     IndentedLogger
 )
 

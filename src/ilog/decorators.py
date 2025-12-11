@@ -51,11 +51,11 @@ def repr(x: Any | None):
     Generate short string description of a numpy/torch/pandas/polars/other multi-array for logging
     purposes.
     """
-    if ((HAS_NUMPY  and isinstance(x, 'np.ndarray'))
-    or  (HAS_TORCH  and isinstance(x, 'torch.Tensor'))
-    or  (HAS_PANDAS and isinstance(x, 'pd.DataFrame'))):
+    if ((HAS_NUMPY  and isinstance(x, np.ndarray))       # pyright: ignore[reportPossiblyUnboundVariable]
+    or  (HAS_TORCH  and isinstance(x, torch.Tensor))     # pyright: ignore[reportPossiblyUnboundVariable]
+    or  (HAS_PANDAS and isinstance(x, pd.DataFrame))):   # pyright: ignore[reportPossiblyUnboundVariable]
         return f'{{shape={x.shape}, dtype={x.dtype}}}'   # pyright: ignore[reportOptionalMemberAccess]
-    elif (HAS_POLARS  and isinstance(x, 'pl.DataFrame')):
+    elif (HAS_POLARS  and isinstance(x, pl.DataFrame)):  # pyright: ignore[reportPossiblyUnboundVariable]
         return f'{{shape={x.shape}, dtypes={x.dtypes}}}' # pyright: ignore[reportOptionalMemberAccess]
     elif x is None:
         return 'None'
