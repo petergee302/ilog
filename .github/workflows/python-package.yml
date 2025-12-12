@@ -44,7 +44,7 @@ jobs:
         path: dist/
 
   publish-to-testpypi:
-    name: Publishing distribution to TestPyPI
+    name: Publishing distributions to TestPyPI
     needs:
     - build
     runs-on: ubuntu-latest
@@ -60,8 +60,9 @@ jobs:
     - name: Download all the dists
       uses: actions/download-artifact@v6
       with:
-        name: dist-${{ matrix.python-version }}
+        pattern: dist-*
         path: dist/
+        merge-multiple: true
     - name: Publish distribution 📦 to TestPyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
