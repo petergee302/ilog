@@ -19,19 +19,21 @@ An extension of the standard logging package, supplying:
 <h2 id="installation">
 1. Installation
 </h2>
-<!--&installation&-->
 
-In order to simply install the repo as package in the `pip` environment, run the following:
+
+### 1.1 From PyPI index
+The most straightforward way:
+```shell
+$ pip install indelog
+```
+
+### 1.2 From GitHub sources
+If you plan to play with the code and make improvements, use editable mode with `dev` dependencies:
 ```shell
 $ git clone https://github.com/petergee302/indelog.git .
-$ pip install .
-```
-
-However if you plan to play with it and make improvements, use editable mode with `dev` dependencies:
-```shell
 $ pip install -e .[dev]
 ```
-Static code analysis and tests are run with:
+Run static code analysis and automated tests before each push:
 ```shell
 $ pyright
 $ pytest -vs
@@ -46,19 +48,21 @@ $ pytest -vs
 2.1 Setup
 </h3>
 
-The recommended way to initialize and configure this logger is to use the `with` clause which guarantees the entry/exit points to be executed:
+The recommended way to initialize and configure this logger is to use the `with ilog.Setup(...)` clause which guarantees the entry/exit points to be executed:
 ```python
+import ilog
+...
 with ilog.Setup() as logger:
     ...
 ```
 There are several options to this object that control _e.g._ the global level or output file:
 - `global_level` (`str` or `int` from `ilog.LEVELS`):
     Verbosity level to set for the logger. Can be either the name or the numerical value corresponding to the level. The default value of `logging.NOTSET` does not change current threshold.
-- `log_path` (`str` or `Path`):
+- `output_path` (`str` or `Path`):
     Where to save the log file: This can be either complete file path, or a directory. In the latter case `module_fname` is required.
 - `module_fname`:
     If given, its base name will be combined with given directory path and extension to build module-related log file. For instance `train.py` will become
-        `<log_path>/train.log`
+        `<output_path>/train.log`
 - `namespace` (`str`):
     If given, overrides the namespace
 - `colorize` (`bool`):
@@ -332,13 +336,13 @@ Standard Python logger is not designed with execution tracing in mind, thus ther
 2. Unless the object is a singleton, log its unique ID for the sake of distinguishing them in the trace, for example:
     ```python
     def __init__(self, arg1 :int, arg2 :bool):
-        logger.trace(f'ClassName[{id(self):012X}]({arg1=},  {arg2=})')
+        logger.trace(f'ClassName[{id(self):012X}]({arg1=}, {arg2=})')
     ```
 
 3. Unless the class is final replace the explicit `ClassName` above with `{type(self).__name__}` in order to make dynamic substitution:
     ```python
     def __init__(self, arg1 :int, arg2 :bool):
-        logger.trace(f'{type(self).__name__}[{id(self):012X}]({arg1=},  {arg2=})')
+        logger.trace(f'{type(self).__name__}[{id(self):012X}]({arg1=}, {arg2=})')
     ```
 
 4. If the function or method is time-consuming, may crash, or causes other log messages to appear, use indentation with at least two messages marking both entry and exit points:
