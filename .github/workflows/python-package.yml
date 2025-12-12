@@ -37,9 +37,9 @@ jobs:
       run: |
         python3 -m build
     - name: Store the distribution packages
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v5
       with:
-        name: python-package-distributions
+        name: dist-${{ matrix.python-version }}
         path: dist/
 
   publish-to-testpypi:
