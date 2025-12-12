@@ -13,6 +13,7 @@ build-backend = "setuptools.build_meta"
 name = "indelog"
 version = "1.0.0"
 description = "An extension of the standard logging package with indentation, severity coloring, default formatting and saving, trace level."
+keywords = ["logging", "indentation", "tracing"]
 readme = "README.md"
 authors = [
     {name = "Peter Gee", email = "petergee302@gmail.com"}
@@ -26,8 +27,13 @@ dependencies = []
 [project.optional-dependencies]
 # Dependencies only needed for development, testing, and linting
 dev = [
-    "pyright",   # Linter
-    "pytest",    # Test Executor
+    "pyright",      # Linter
+    "pytest",       # Test Executor
+]
+publish = [
+    "setuptools",   # setup
+    "build",        # build tar.gz and wheel binaries
+    "twine",        # upload
 ]
 
 # TOOL CONFIGURATION

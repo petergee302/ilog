@@ -105,7 +105,7 @@ def getLogger(
 
 class Setup:
     def __init__(self, global_level :str | int  = NOTSET,
-                           log_path :str | None = None,
+                        output_path :str | None = None,
                        module_fname :str | None = None,
                           namespace :str | None = DEFAULT_NAMESPACE,
                            colorize :bool       = DEFAULT_COLORIZE,
@@ -119,13 +119,13 @@ class Setup:
                 Verbosity level to set for the logger. Can be either the name or the numerical value
                 corresponding to the level. The default value of `logging.NOTSET` does not change
                 current threshold.
-            log_path [in]:
+            output_path [in]:
                 Where to save the log file: This can be either complete file path, or a directory.
                 in the latter case module_fname is required.
             module_fname [in]:
                 If given, its base name will be combined with given directory path and extension to
                 build module-related log file. For instance `train.py` will become
-                    `<log_path>/train.log`
+                    `<output_path>/train.log`
             namespace [in]:
                 If given, overrides the namespace
             colorize [in]:
@@ -137,18 +137,18 @@ class Setup:
         if isinstance(global_level, str):
             global_level = LEVEL_NAME_2_VALUE[global_level]
 
-        if log_path:
-            log_bpath, log_ext = os.path.splitext(log_path)
+        if output_path:
+            log_bpath, log_ext = os.path.splitext(output_path)
             if log_ext == FILENAME_EXT:
                 # assume complete file path
-                log_fpath = log_path
+                log_fpath = output_path
             else:
                 # try to build file path
                 if module_fname in {None, '__main__'}:
                     # replace extension to not overwrite the module itself
                     log_fpath = f'{log_bpath}-{timestamp_string()}{FILENAME_EXT}'
                 else:
-                    # treat log_path as directory path, and combine it with module name and extension
+                    # treat output_path as directory path, and combine it with module name and extension
                     module_name, _ = os.path.splitext(os.path.basename(str(module_fname))) # pacify linter
                     log_fpath = os.path.join(log_bpath, f'{module_name}-{timestamp_string()}{FILENAME_EXT}')
         else:
